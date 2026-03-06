@@ -1,0 +1,1608 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StartupUz - Connect & Invest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Google Fonts -->
+    <link id="heading-font-link" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link id="body-font-link" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4F46E5', // Requested Primary
+                            700: '#4338ca',
+                            900: '#312e81',
+                        },
+                        accent: {
+                            green: '#10B981',
+                            yellow: '#F59E0B',
+                        },
+                        neutral: {
+                            50: '#F9FAFB', // Requested Background
+                            100: '#f3f4f6',
+                            200: '#e5e7eb',
+                            300: '#d1d5db',
+                            800: '#1f2937',
+                            900: '#111827',
+                        }
+                    },
+                    fontFamily: {
+                        heading: ['var(--font-heading-name)', 'sans-serif'],
+                        body: ['var(--font-body-name)', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'neumorph': '8px 8px 16px #d1d5db, -8px -8px 16px #ffffff',
+                        'neumorph-sm': '5px 5px 10px #d1d5db, -5px -5px 10px #ffffff',
+                        'neumorph-inset': 'inset 5px 5px 10px #d1d5db, inset -5px -5px 10px #ffffff',
+                        'soft': '0 10px 40px -10px rgba(0,0,0,0.08)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --font-heading-name: 'Poppins';
+            --font-body-name: 'Inter';
+            --font-heading: 'Poppins', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --letter-spacing-heading: -0.02em;
+            --letter-spacing-body: 0px;
+            
+            /* Spacing */
+            --space-base: 1rem;
+            
+            /* Borders */
+            --radius-small: 0.5rem;
+            --radius-large: 1rem;
+            --border-width: 1px;
+            
+            /* Shadows */
+            --shadow-color: 79 70 229; /* Primary color based shadow */
+            --shadow-offset-x: 4px;
+            --shadow-offset-y: 4px;
+            --shadow-blur: 10px;
+            --shadow-spread: 0px;
+            --shadow-opacity: 0.15;
+            --shadow-custom: 4px 4px 10px rgba(79, 70, 229, 0.15);
+            --shadow-custom-hover: 6px 6px 15px rgba(79, 70, 229, 0.25);
+        }
+
+        body {
+            background-color: #F9FAFB;
+            color: #1f2937;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c7c7c7; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8; 
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .neumorph-card {
+            background: #F9FAFB;
+            border-radius: 1rem;
+            box-shadow: 8px 8px 16px #eef0f4, -8px -8px 16px #ffffff;
+            border: 1px solid rgba(255,255,255,0.6);
+            transition: all 0.3s ease;
+        }
+        
+        .neumorph-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 12px 12px 20px #eef0f4, -12px -12px 20px #ffffff;
+        }
+
+        .neumorph-btn {
+            background: #F9FAFB;
+            box-shadow: 5px 5px 10px #eef0f4, -5px -5px 10px #ffffff;
+            transition: all 0.2s ease;
+        }
+        
+        .neumorph-btn:active {
+            box-shadow: inset 3px 3px 6px #eef0f4, inset -3px -3px 6px #ffffff;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #4F46E5 0%, #818cf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Hide scrollbar for horizontal scrolling areas */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* View Transition Logic */
+        .view-section {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+        .view-section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="font-body bg-neutral-50 text-neutral-900 min-h-screen flex flex-col">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-panel border-b border-neutral-200/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <!-- Logo -->
+                <div class="flex items-center cursor-pointer" onclick="switchView('landing')">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-600 to-primary-500 flex items-center justify-center text-white shadow-lg shadow-primary-500/30">
+                        <i data-lucide="rocket" class="w-6 h-6"></i>
+                    </div>
+                    <span class="ml-3 text-2xl font-heading font-bold text-neutral-900">Startup<span class="text-primary-600">Uz</span></span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <button onclick="switchView('landing')" class="text-neutral-600 hover:text-primary-600 font-medium transition-colors">Home</button>
+                    <button onclick="switchView('startups')" class="text-neutral-600 hover:text-primary-600 font-medium transition-colors">Startups</button>
+                    <button onclick="switchView('investor')" class="text-neutral-600 hover:text-primary-600 font-medium transition-colors">Investors</button>
+                    <button onclick="switchView('about')" class="text-neutral-600 hover:text-primary-600 font-medium transition-colors">About</button>
+                    <button onclick="switchView('add-startup')" class="text-neutral-600 hover:text-primary-600 font-medium transition-colors">Add Startup</button>
+                </div>
+
+                <!-- Right Actions -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <!-- Language Switcher -->
+                    <div class="flex items-center bg-neutral-100 rounded-full p-1 border border-neutral-200">
+                        <button class="px-3 py-1 rounded-full bg-white shadow-sm text-xs font-bold text-primary-600 lang-btn" data-lang="en">EN</button>
+                        <button class="px-3 py-1 rounded-full text-neutral-500 text-xs font-medium hover:text-neutral-900 lang-btn" data-lang="uz">UZ</button>
+                        <button class="px-3 py-1 rounded-full text-neutral-500 text-xs font-medium hover:text-neutral-900 lang-btn" data-lang="ru">RU</button>
+                    </div>
+                    
+                    <button onclick="switchView('login')" class="neumorph-btn px-5 py-2.5 rounded-lg text-sm font-semibold text-neutral-700 hover:text-primary-600">
+                        Log In
+                    </button>
+                    <button onclick="switchView('add-startup')" class="px-5 py-2.5 rounded-lg bg-primary-600 text-white text-sm font-semibold shadow-lg shadow-primary-600/30 hover:bg-primary-700 transition-all transform hover:-translate-y-0.5">
+                        Get Funded
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-neutral-600 hover:text-primary-600">
+                        <i data-lucide="menu" class="w-8 h-8"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden fixed inset-0 bg-white z-50 flex flex-col p-6 gap-6 transition-transform duration-300 translate-x-full">
+        <div class="flex justify-between items-center mb-6">
+            <span class="text-2xl font-heading font-bold text-neutral-900">Startup<span class="text-primary-600">Uz</span></span>
+            <button id="close-mobile-menu" class="text-neutral-600 hover:text-primary-600">
+                <i data-lucide="x" class="w-8 h-8"></i>
+            </button>
+        </div>
+        <button onclick="switchView('landing'); closeMobileMenu()" class="text-neutral-700 text-lg font-medium text-left">Home</button>
+        <button onclick="switchView('startups'); closeMobileMenu()" class="text-neutral-700 text-lg font-medium text-left">Startups</button>
+        <button onclick="switchView('investor'); closeMobileMenu()" class="text-neutral-700 text-lg font-medium text-left">Investors</button>
+        <button onclick="switchView('about'); closeMobileMenu()" class="text-neutral-700 text-lg font-medium text-left">About me</button>
+        <button onclick="switchView('add-startup'); closeMobileMenu()" class="text-neutral-700 text-lg font-medium text-left">Add Startup</button>
+        <div class="flex gap-2 mt-4">
+            <button class="px-3 py-1 rounded-full bg-white shadow-sm text-xs font-bold text-primary-600 lang-btn" data-lang="en">EN</button>
+            <button class="px-3 py-1 rounded-full text-neutral-500 text-xs font-medium hover:text-neutral-900 lang-btn" data-lang="uz">UZ</button>
+            <button class="px-3 py-1 rounded-full text-neutral-500 text-xs font-medium hover:text-neutral-900 lang-btn" data-lang="ru">RU</button>
+        </div>
+        <button onclick="switchView('login'); closeMobileMenu()" class="neumorph-btn px-5 py-2.5 rounded-lg text-sm font-semibold text-neutral-700 hover:text-primary-600 mt-4">
+            Log In
+        </button>
+        <button onclick="switchView('add-startup'); closeMobileMenu()" class="px-5 py-2.5 rounded-lg bg-primary-600 text-white text-sm font-semibold shadow-lg shadow-primary-600/30 hover:bg-primary-700 transition-all mt-2">
+            Get Funded
+        </button>
+    </div>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow pt-20">
+        
+        <!-- VIEW 1: LANDING PAGE -->
+        <section id="landing" class="view-section active">
+            <!-- Hero Section -->
+            <div class="relative overflow-hidden pb-16 pt-12 lg:pt-24">
+                <div class="absolute top-0 left-1/2 w-full -translate-x-1/2 h-full z-0 pointer-events-none">
+                    <div class="absolute top-20 left-10 w-72 h-72 bg-primary-500/10 rounded-full blur-3xl"></div>
+                    <div class="absolute bottom-20 right-10 w-96 h-96 bg-accent-yellow/10 rounded-full blur-3xl"></div>
+                </div>
+
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="grid lg:grid-cols-2 gap-12 items-center">
+                        <div class="text-center lg:text-left">
+                            <div class="inline-flex items-center px-3 py-1 rounded-full bg-primary-50 border border-primary-100 text-primary-600 text-sm font-medium mb-6">
+                                <span class="flex h-2 w-2 rounded-full bg-primary-600 mr-2"></span>
+                                #1 Platform for Uzbek Startups
+                            </div>
+                            <h1 class="text-4xl lg:text-6xl font-heading font-extrabold text-neutral-900 leading-tight mb-6">
+                                Turn Your Vision Into <br>
+                                <span class="gradient-text">Global Reality</span>
+                            </h1>
+                            <p class="text-lg text-neutral-600 mb-8 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                                Connect with top investors, showcase your pitch, and secure the funding you need to scale. The bridge between Uzbek innovation and global capital.
+                            </p>
+                            <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                                <button onclick="switchView('add-startup')" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-primary-600 text-white font-bold shadow-xl shadow-primary-600/30 hover:bg-primary-700 transition-all transform hover:-translate-y-1 flex items-center justify-center">
+                                    <i data-lucide="rocket" class="w-5 h-5 mr-2"></i>
+                                    Add Your Startup
+                                </button>
+                                <button onclick="switchView('startups')" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-white text-neutral-700 font-bold border border-neutral-200 shadow-lg hover:bg-neutral-50 transition-all flex items-center justify-center">
+                                    <i data-lucide="search" class="w-5 h-5 mr-2"></i>
+                                    Find Startups
+                                </button>
+                            </div>
+                            
+                            <!-- Stats -->
+                            <div class="mt-12 grid grid-cols-3 gap-6 border-t border-neutral-200 pt-8">
+                                <div>
+                                    <p class="text-3xl font-bold text-neutral-900">500+</p>
+                                    <p class="text-sm text-neutral-500">Startups</p>
+                                </div>
+                                <div>
+                                    <p class="text-3xl font-bold text-neutral-900">$12M</p>
+                                    <p class="text-sm text-neutral-500">Invested</p>
+                                </div>
+                                <div>
+                                    <p class="text-3xl font-bold text-neutral-900">50+</p>
+                                    <p class="text-sm text-neutral-500">Investors</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Hero Image/Illustration -->
+                        <div class="relative lg:h-[600px] flex items-center justify-center">
+                            <div class="relative w-full max-w-lg aspect-square">
+                                <!-- Abstract decorative elements -->
+                                <div class="absolute inset-0 bg-gradient-to-tr from-primary-100 to-white rounded-full opacity-50 blur-2xl animate-pulse"></div>
+                                <img src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Collaboration" class="relative rounded-3xl shadow-2xl shadow-primary-900/20 object-cover w-full h-full z-10 transform rotate-3 hover:
+                                
+                                <!-- Floating Cards -->
+                                <div class="absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-xl z-20 flex items-center gap-3 animate-bounce" style="animation-duration: 3s;">
+                                    <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                                        <i data-lucide="trending-up" class="w-6 h-6"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-neutral-500">Growth</p>
+                                        <p class="text-sm font-bold text-neutral-900">+124%</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="absolute top-10 -right-6 bg-white p-4 rounded-2xl shadow-xl z-20 flex items-center gap-3 animate-bounce" style="animation-duration: 4s;">
+                                    <div class="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600">
+                                        <i data-lucide="star" class="w-6 h-6"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-neutral-500">Rating</p>
+                                        <p class="text-sm font-bold text-neutral-900">4.9/5.0</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Section -->
+            <div class="bg-white py-20">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl font-heading font-bold text-neutral-900 mb-4" data-uz="Qanday ishlaydi" data-ru="Как это работает" data-en="How It Works">How It Works</h2>
+                        <p class="text-neutral-600 max-w-2xl mx-auto" data-uz="Innovatsion g‘oyalar va investorlarni bog‘lashning oddiy bosqichlari." data-ru="Простые шаги для соединения инновационных идей с капиталом." data-en="Simple steps to connect innovative minds with strategic capital.">Simple steps to connect innovative minds with strategic capital.</p>
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <!-- Step 1 -->
+                        <div class="neumorph-card p-8 text-center group hover:bg-primary-50 transition-colors">
+                            <div class="w-16 h-16 mx-auto bg-primary-100 rounded-2xl flex items-center justify-center text-primary-600 mb-6 group-hover:scale-110 transition-transform">
+                                <i data-lucide="video" class="w-8 h-8"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-neutral-900 mb-3" data-uz="1. G‘oyangizni joylang" data-ru="1. Разместите идею" data-en="1. Pitch Your Idea">1. Pitch Your Idea</h3>
+                            <p class="text-neutral-500" data-uz="Video pitch va startap tafsilotlarini yuklang. O‘zingiz haqingizda gapiring." data-ru="Загрузите видео-питч и детали стартапа. Расскажите свою историю." data-en="Upload your video pitch and startup details. Tell your story in your own words.">Upload your video pitch and startup details. Tell your story in your own words.</p>
+                        </div>
+                        <!-- Step 2 -->
+                        <div class="neumorph-card p-8 text-center group hover:bg-primary-50 transition-colors">
+                            <div class="w-16 h-16 mx-auto bg-primary-100 rounded-2xl flex items-center justify-center text-primary-600 mb-6 group-hover:scale-110 transition-transform">
+                                <i data-lucide="users" class="w-8 h-8"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-neutral-900 mb-3" data-uz="2. Bog‘laning" data-ru="2. Свяжитесь" data-en="2. Connect">2. Connect</h3>
+                            <p class="text-neutral-500" data-uz="Investorlar loyihalarni ko‘rib chiqadi va asoschilar bilan bog‘lanadi." data-ru="Инвесторы просматривают проекты и связываются с основателями." data-en="Investors browse, filter, and connect directly with founders they believe in.">Investors browse, filter, and connect directly with founders they believe in.</p>
+                        </div>
+                        <!-- Step 3 -->
+                        <div class="neumorph-card p-8 text-center group hover:bg-primary-50 transition-colors">
+                            <div class="w-16 h-16 mx-auto bg-primary-100 rounded-2xl flex items-center justify-center text-primary-600 mb-6 group-hover:scale-110 transition-transform">
+                                <i data-lucide="zap" class="w-8 h-8"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-neutral-900 mb-3" data-uz="3. Investitsiya oling" data-ru="3. Получите инвестиции" data-en="3. Get Funded">3. Get Funded</h3>
+                            <p class="text-neutral-500" data-uz="Investitsiya oling, rivojlaning va biznesingizni o‘stiring." data-ru="Получите инвестиции, развивайтесь и растите свой бизнес." data-en="Secure investment, track progress, and grow your business to the next level.">Secure investment, track progress, and grow your business to the next level.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3 ta real startup qatori -->
+            <div class="bg-neutral-50 py-16">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <h2 class="text-2xl font-bold text-primary-600 mb-8 text-center" data-uz="So‘nggi startaplar" data-ru="Последние стартапы" data-en="Latest Startups">Latest Startups</h2>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <!-- Startup 1 -->
+                        <div class="neumorph-card overflow-hidden group cursor-pointer" onclick="switchView('detail')">
+                            <div class="relative h-44">
+                                <img src="https://img.youtube.com/vi/ScMzIvxBSi4/hqdefault.jpg" alt="Startup" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                                <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold text-primary-600 flex items-center shadow-sm">
+                                    IT
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="text-lg font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">EduTech</h3>
+                                    <span class="text-xs font-medium text-neutral-400 bg-neutral-100 px-2 py-1 rounded" data-uz="Ta'lim" data-ru="Образование" data-en="Education">Education</span>
+                                </div>
+                                <p class="text-sm text-neutral-500 mb-4 line-clamp-2" data-uz="Onlayn ta’lim platformasi, zamonaviy kurslar va mentorlik." data-ru="Онлайн образовательная платформа, современные курсы и менторство." data-en="Online education platform, modern courses and mentoring.">Onlayn ta’lim platformasi, zamonaviy kurslar va mentorlik.</p>
+                                <div class="flex items-center justify-between pt-4 border-t border-neutral-100">
+                                    <div class="flex items-center">
+                                        <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-8 h-8 rounded-full border-2 border-white shadow-sm" alt="Founder">
+                                        <span class="text-xs font-medium text-neutral-600 ml-2">Aziza Karimova</span>
+                                    </div>
+                                    <span class="font-semibold text-primary-600">$15,000</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Startup 2 -->
+                        <div class="neumorph-card overflow-hidden group cursor-pointer" onclick="switchView('detail')">
+                            <div class="relative h-44">
+                                <img src="https://img.youtube.com/vi/ysz5S6PUM-U/hqdefault.jpg" alt="Startup" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                                <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold text-green-600 flex items-center shadow-sm">
+                                    Agro
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="text-lg font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">AgroSmart</h3>
+                                    <span class="text-xs font-medium text-neutral-400 bg-neutral-100 px-2 py-1 rounded" data-uz="Agrotexnologiya" data-ru="Агротехнологии" data-en="AgroTech">AgroTech</span>
+                                </div>
+                                <p class="text-sm text-neutral-500 mb-4 line-clamp-2" data-uz="Qishloq xo‘jaligi uchun aqlli monitoring tizimi." data-ru="Умная система мониторинга для сельского хозяйства." data-en="Smart monitoring system for agriculture.">Qishloq xo‘jaligi uchun aqlli monitoring tizimi.</p>
+                                <div class="flex items-center justify-between pt-4 border-t border-neutral-100">
+                                    <div class="flex items-center">
+                                        <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-8 h-8 rounded-full border-2 border-white shadow-sm" alt="Founder">
+                                        <span class="text-xs font-medium text-neutral-600 ml-2">Bekzod Tursunov</span>
+                                    </div>
+                                    <span class="font-semibold text-primary-600">$8,000</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Startup 3 -->
+                        <div class="neumorph-card overflow-hidden group cursor-pointer" onclick="switchView('detail')">
+                            <div class="relative h-44">
+                                <img src="https://img.youtube.com/vi/jNQXAC9IVRw/hqdefault.jpg" alt="Startup" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                                <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold text-yellow-600 flex items-center shadow-sm">
+                                    FinTech
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="text-lg font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">PayUz</h3>
+                                    <span class="text-xs font-medium text-neutral-400 bg-neutral-100 px-2 py-1 rounded" data-uz="Moliyaviy texnologiya" data-ru="Финтех" data-en="FinTech">FinTech</span>
+                                </div>
+                                <p class="text-sm text-neutral-500 mb-4 line-clamp-2" data-uz="To‘lovlarni tez va xavfsiz amalga oshirish platformasi." data-ru="Платформа для быстрых и безопасных платежей." data-en="Platform for fast and secure payments.">To‘lovlarni tez va xavfsiz amalga oshirish platformasi.</p>
+                                <div class="flex items-center justify-between pt-4 border-t border-neutral-100">
+                                    <div class="flex items-center">
+                                        <img src="https://randomuser.me/api/portraits/men/45.jpg" class="w-8 h-8 rounded-full border-2 border-white shadow-sm" alt="Founder">
+                                        <span class="text-xs font-medium text-neutral-600 ml-2">Dilshod Raximov</span>
+                                    </div>
+                                    <span class="font-semibold text-primary-600">$25,000</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Startup 4 -->
+                        <div class="neumorph-card overflow-hidden group cursor-pointer" onclick="switchView('detail')">
+                            <div class="relative h-44">
+                                <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg" alt="Startup" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                                <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold text-purple-600 flex items-center shadow-sm">
+                                    Health
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="text-lg font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">HealthUz</h3>
+                                    <span class="text-xs font-medium text-neutral-400 bg-neutral-100 px-2 py-1 rounded" data-uz="Salomatlik" data-ru="Здоровье" data-en="Health">Health</span>
+                                </div>
+                                <p class="text-sm text-neutral-500 mb-4 line-clamp-2" data-uz="Onlayn tibbiy maslahat va xizmatlar platformasi." data-ru="Онлайн платформа медицинских консультаций и услуг." data-en="Online medical advice and services platform.">Onlayn tibbiy maslahat va xizmatlar platformasi.</p>
+                                <div class="flex items-center justify-between pt-4 border-t border-neutral-100">
+                                    <div class="flex items-center">
+                                        <img src="https://randomuser.me/api/portraits/women/65.jpg" class="w-8 h-8 rounded-full border-2 border-white shadow-sm" alt="Founder">
+                                        <span class="text-xs font-medium text-neutral-600 ml-2">Malika Usmonova</span>
+                                    </div>
+                                    <span class="font-semibold text-primary-600">$10,000</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Startup 5 -->
+                        <div class="neumorph-card overflow-hidden group cursor-pointer" onclick="switchView('detail')">
+                            <div class="relative h-44">
+                                <img src="https://img.youtube.com/vi/tgbNymZ7vqY/hqdefault.jpg" alt="Startup" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                                <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold text-pink-600 flex items-center shadow-sm">
+                                    E-commerce
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h3 class="text-lg font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">ShopUz</h3>
+                                    <span class="text-xs font-medium text-neutral-400 bg-neutral-100 px-2 py-1 rounded" data-uz="Elektron savdo" data-ru="Электронная коммерция" data-en="E-commerce">E-commerce</span>
+                                </div>
+                                <p class="text-sm text-neutral-500 mb-4 line-clamp-2" data-uz="Mahalliy onlayn do‘konlar uchun platforma." data-ru="Платформа для местных онлайн-магазинов." data-en="Platform for local online stores.">Mahalliy onlayn do‘konlar uchun platforma.</p>
+                                <div class="flex items-center justify-between pt-4 border-t border-neutral-100">
+                                    <div class="flex items-center">
+                                        <img src="https://randomuser.me/api/portraits/men/21.jpg" class="w-8 h-8 rounded-full border-2 border-white shadow-sm" alt="Founder">
+                                        <span class="text-xs font-medium text-neutral-600 ml-2">Jamshid Akramov</span>
+                                    </div>
+                                    <span class="font-semibold text-primary-600">$5,000</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 2: STARTUP LIST -->
+        <section id="startups" class="view-section py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
+                    <div>
+                        <h2 class="text-3xl font-heading font-bold text-neutral-900">Explore Startups</h2>
+                        <p class="text-neutral-500 mt-2">Discover the next unicorn from Uzbekistan.</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <div class="relative">
+                            <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400"></i>
+                            <input type="text" placeholder="Search startups..." class="pl-10 pr-4 py-2 rounded-lg border border-neutral-200 bg-white focus:outline-none focus:ring-2 focus:ring-primary-500 w-64">
+                        </div>
+                        <button class="px-4 py-2 bg-white border border-neutral-200 rounded-lg text-neutral-600 hover:bg-neutral-50 flex items-center gap-2">
+                            <i data-lucide="filter" class="w-4 h-4"></i> Filter
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filters Row -->
+                <div class="flex gap-2 overflow-x-auto no-scrollbar mb-8 pb-2">
+                    <button class="px-4 py-1.5 rounded-full bg-primary-600 text-white text-sm font-medium whitespace-nowrap">All Industries</button>
+                    <button class="px-4 py-1.5 rounded-full bg-white border border-neutral-200 text-neutral-600 text-sm font-medium hover:border-primary-500 hover:text-primary-600 whitespace-nowrap transition-colors">Fintech</button>
+                    <button class="px-4 py-1.5 rounded-full bg-white border border-neutral-200 text-neutral-600 text-sm font-medium hover:border-primary-500 hover:text-primary-600 whitespace-nowrap transition-colors">AgroTech</button>
+                    <button class="px-4 py-1.5 rounded-full bg-white border border-neutral-200 text-neutral-600 text-sm font-medium hover:border-primary-500 hover:text-primary-600 whitespace-nowrap transition-colors">EdTech</button>
+                    <button class="px-4 py-1.5 rounded-full bg-white border border-neutral-200 text-neutral-600 text-sm font-medium hover:border-primary-500 hover:text-primary-600 whitespace-nowrap transition-colors">E-commerce</button>
+                    <button class="px-4 py-1.5 rounded-full bg-white border border-neutral-200 text-neutral-600 text-sm font-medium hover:border-primary-500 hover:text-primary-600 whitespace-nowrap transition-colors">AI & Big Data</button>
+                </div>
+
+                <!-- Grid -->
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Card 1 -->
+                    <div class="neumorph-card overflow-hidden group cursor-pointer" onclick="switchView('detail')">
+                        <div class="relative h-48">
+                            <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Startup" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold text-accent-green flex items-center shadow-sm">
+                                <span class="w-2 h-2 rounded-full bg-accent-green mr-1.5 animate-pulse"></span> New
+                            </div>
+                            <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                                <div class="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center text-primary-600 shadow-lg transform scale-0 group-hover:scale-100 transition-transform duration-300">
+                                    <i data-lucide="play" class="w-5 h-5 ml-1"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-lg font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">PayUz Solutions</h3>
+                                <span class="text-xs font-medium text-neutral-400 bg-neutral-100 px-2 py-1 rounded">Fintech</span>
+                            </div>
+                            <p class="text-sm text-neutral-500 mb-4 line-clamp-2">Revolutionizing peer-to-peer payments in rural Uzbekistan using SMS-based blockchain technology.</p>
+                            
+                            <div class="mb-4">
+                                <div class="flex justify-between text-xs font-medium mb-1">
+                                    <span class="text-neutral-600">$45,000 raised</span>
+                                    <span class="text-primary-600">45%</span>
+                                </div>
+                                <div class="w-full bg-neutral-200 rounded-full h-2">
+                                    <div class="bg-primary-600 h-2 rounded-full" style="width: 45%"></div>
+                                </div>
+                                <div class="flex justify-between text-xs text-neutral-400 mt-1">
+                                    <span>Goal: $100,000</span>
+                                    <span>12 days left</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between pt-4 border-t border-neutral-100">
+                                <div class="flex items-center">
+                                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=2&w=100&h=100&q=80" class="w-8 h-8 rounded-full border-2 border-white shadow-sm" alt="Founder">
+                                    <span class="text-xs font-medium text-neutral-600 ml-2">Aziz K.</span>
+                                </div>
+                                <button class="text-primary-600 text-sm font-semibold hover:underline">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="neumorph-card overflow-hidden group cursor-pointer" onclick="switchView('detail')">
+                        <div class="relative h-48">
+                            <img src="img3.jpg" alt="Startup" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold text-blue-500 flex items-center shadow-sm">
+                                <span class="w-2 h-2 rounded-full bg-blue-500 mr-1.5"></span> Funded
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-lg font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">AgroSmart</h3>
+                                <span class="text-xs font-medium text-neutral-400 bg-neutral-100 px-2 py-1 rounded">AgroTech</span>
+                            </div>
+                            <p class="text-sm text-neutral-500 mb-4 line-clamp-2" data-uz="Qishloq xo‘jaligi uchun aqlli monitoring tizimi." data-ru="Умная система мониторинга для сельского хозяйства." data-en="Smart monitoring system for agriculture.">Qishloq xo‘jaligi uchun aqlli monitoring tizimi.</p>
+                            
+                            <div class="mb-4">
+                                <div class="flex justify-between text-xs font-medium mb-1">
+                                    <span class="text-neutral-600">$150,000 raised</span>
+                                    <span class="text-accent-green">100%</span>
+                                </div>
+                                <div class="w-full bg-neutral-200 rounded-full h-2">
+                                    <div class="bg-accent-green h-2 rounded-full" style="width: 100%"></div>
+                                </div>
+                                <div class="flex justify-between text-xs text-neutral-400 mt-1">
+                                    <span>Goal: $150,000</span>
+                                    <span>Completed</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between pt-4 border-t border-neutral-100">
+                                <div class="flex items-center">
+                                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=2&w=100&h=100&q=80" class="w-8 h-8 rounded-full border-2 border-white shadow-sm" alt="Founder">
+                                    <span class="text-xs font-medium text-neutral-600 ml-2">Malika R.</span>
+                                </div>
+                                <button class="text-primary-600 text-sm font-semibold hover:underline">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="neumorph-card overflow-hidden group cursor-pointer" onclick="switchView('detail')">
+                        <div class="relative h-48">
+                            <img src="startap1.jpg" alt="Startup" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold text-blue-500 flex items-center shadow-sm">
+                                <span class="w-2 h-2 rounded-full bg-blue-500 mr-1.5"></span> 
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-lg font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">AgroSmart</h3>
+                                <span class="text-xs font-medium text-neutral-400 bg-neutral-100 px-2 py-1 rounded">AgroTech</span>
+                            </div>
+                            <p class="text-sm text-neutral-500 mb-4 line-clamp-2" data-uz="Qishloq xo‘jaligi uchun aqlli monitoring tizimi." data-ru="Умная система мониторинга для сельского хозяйства." data-en="Smart monitoring system for agriculture.">Qishloq xo‘jaligi uchun aqlli monitoring tizimi.</p>
+                            
+                            <div class="mb-4">
+                                <div class="flex justify-between text-xs font-medium mb-1">
+                                    <span class="text-neutral-600">$150,000 raised</span>
+                                    <span class="text-accent-green">100%</span>
+                                </div>
+                                <div class="w-full bg-neutral-200 rounded-full h-2">
+                                    <div class="bg-accent-green h-2 rounded-full" style="width: 100%"></div>
+                                </div>
+                                <div class="flex justify-between text-xs text-neutral-400 mt-1">
+                                    <span>Goal: $150,000</span>
+                                    <span>Completed</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between pt-4 border-t border-neutral-100">
+                                <div class="flex items-center">
+                                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=2&w=100&h=100&q=80" class="w-8 h-8 rounded-full border-2 border-white shadow-sm" alt="Founder">
+                                    <span class="text-xs font-medium text-neutral-600 ml-2">Malika R.</span>
+                                </div>
+                                <button class="text-primary-600 text-sm font-semibold hover:underline">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="neumorph-card overflow-hidden group cursor-pointer" onclick="switchView('detail')">
+                        <div class="relative h-48">
+                            <img src="startap2.jpg" alt="Startup" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold text-blue-500 flex items-center shadow-sm">
+                                <span class="w-2 h-2 rounded-full bg-blue-500 mr-1.5"></span> Funded
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-lg font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">AgroSmart</h3>
+                                <span class="text-xs font-medium text-neutral-400 bg-neutral-100 px-2 py-1 rounded">AgroTech</span>
+                            </div>
+                            <p class="text-sm text-neutral-500 mb-4 line-clamp-2" data-uz="Qishloq xo‘jaligi uchun aqlli monitoring tizimi." data-ru="Умная система мониторинга для сельского хозяйства." data-en="Smart monitoring system for agriculture.">Qishloq xo‘jaligi uchun aqlli monitoring tizimi.</p>
+                            
+                            <div class="mb-4">
+                                <div class="flex justify-between text-xs font-medium mb-1">
+                                    <span class="text-neutral-600">$150,000 raised</span>
+                                    <span class="text-accent-green">100%</span>
+                                </div>
+                                <div class="w-full bg-neutral-200 rounded-full h-2">
+                                    <div class="bg-accent-green h-2 rounded-full" style="width: 100%"></div>
+                                </div>
+                                <div class="flex justify-between text-xs text-neutral-400 mt-1">
+                                    <span>Goal: $150,000</span>
+                                    <span>Completed</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between pt-4 border-t border-neutral-100">
+                                <div class="flex items-center">
+                                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=2&w=100&h=100&q=80" class="w-8 h-8 rounded-full border-2 border-white shadow-sm" alt="Founder">
+                                    <span class="text-xs font-medium text-neutral-600 ml-2">Malika R.</span>
+                                </div>
+                                <button class="text-primary-600 text-sm font-semibold hover:underline">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="neumorph-card overflow-hidden group cursor-pointer" onclick="switchView('detail')">
+                        <div class="relative h-48">
+                            <img src="https://images.unsplash.com/photo-1518546305927-5a555bb7020d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Startup" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold text-blue-500 flex items-center shadow-sm">
+                                <span class="w-2 h-2 rounded-full bg-blue-500 mr-1.5"></span> Funded
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-lg font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">AgroSmart</h3>
+                                <span class="text-xs font-medium text-neutral-400 bg-neutral-100 px-2 py-1 rounded">AgroTech</span>
+                            </div>
+                            <p class="text-sm text-neutral-500 mb-4 line-clamp-2" data-uz="Qishloq xo‘jaligi uchun aqlli monitoring tizimi." data-ru="Умная система мониторинга для сельского хозяйства." data-en="Smart monitoring system for agriculture.">Qishloq xo‘jaligi uchun aqlli monitoring tizimi.</p>
+                            
+                            <div class="mb-4">
+                                <div class="flex justify-between text-xs font-medium mb-1">
+                                    <span class="text-neutral-600">$150,000 raised</span>
+                                    <span class="text-accent-green">100%</span>
+                                </div>
+                                <div class="w-full bg-neutral-200 rounded-full h-2">
+                                    <div class="bg-accent-green h-2 rounded-full" style="width: 100%"></div>
+                                </div>
+                                <div class="flex justify-between text-xs text-neutral-400 mt-1">
+                                    <span>Goal: $150,000</span>
+                                    <span>Completed</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between pt-4 border-t border-neutral-100">
+                                <div class="flex items-center">
+                                    <img src="img2.jpg" class="w-8 h-8 rounded-full border-2 border-white shadow-sm" alt="Founder">
+                                    <span class="text-xs font-medium text-neutral-600 ml-2">Malika R.</span>
+                                </div>
+                                <button class="text-primary-600 text-sm font-semibold hover:underline">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="neumorph-card overflow-hidden group cursor-pointer" onclick="switchView('detail')">
+                        <div class="relative h-48">
+                            <img src="startap3.jpg" alt="Startup" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold text-blue-500 flex items-center shadow-sm">
+                                <span class="w-2 h-2 rounded-full bg-blue-500 mr-1.5"></span> Funded
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-lg font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">AgroSmart</h3>
+                                <span class="text-xs font-medium text-neutral-400 bg-neutral-100 px-2 py-1 rounded">AgroTech</span>
+                            </div>
+                            <p class="text-sm text-neutral-500 mb-4 line-clamp-2" data-uz="Qishloq xo‘jaligi uchun aqlli monitoring tizimi." data-ru="Умная система мониторинга для сельского хозяйства." data-en="Smart monitoring system for agriculture.">Qishloq xo‘jaligi uchun aqlli monitoring tizimi.</p>
+                            
+                            <div class="mb-4">
+                                <div class="flex justify-between text-xs font-medium mb-1">
+                                    <span class="text-neutral-600">$150,000 raised</span>
+                                    <span class="text-accent-green">100%</span>
+                                </div>
+                                <div class="w-full bg-neutral-200 rounded-full h-2">
+                                    <div class="bg-accent-green h-2 rounded-full" style="width: 100%"></div>
+                                </div>
+                                <div class="flex justify-between text-xs text-neutral-400 mt-1">
+                                    <span>Goal: $150,000</span>
+                                    <span>Completed</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between pt-4 border-t border-neutral-100">
+                                <div class="flex items-center">
+                                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=2&w=100&h=100&q=80" class="w-8 h-8 rounded-full border-2 border-white shadow-sm" alt="Founder">
+                                    <span class="text-xs font-medium text-neutral-600 ml-2">Malika R.</span>
+                                </div>
+                                <button class="text-primary-600 text-sm font-semibold hover:underline">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                     <div class="neumorph-card overflow-hidden group cursor-pointer" onclick="switchView('detail')">
+                        <div class="relative h-48">
+                            <img src="startap4.jpg" alt="Startup" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold text-blue-500 flex items-center shadow-sm">
+                                <span class="w-2 h-2 rounded-full bg-blue-500 mr-1.5"></span> Funded
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-lg font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">AgroSmart</h3>
+                                <span class="text-xs font-medium text-neutral-400 bg-neutral-100 px-2 py-1 rounded">AgroTech</span>
+                            </div>
+                            <p class="text-sm text-neutral-500 mb-4 line-clamp-2" data-uz="Qishloq xo‘jaligi uchun aqlli monitoring tizimi." data-ru="Умная система мониторинга для сельского хозяйства." data-en="Smart monitoring system for agriculture.">Qishloq xo‘jaligi uchun aqlli monitoring tizimi.</p>
+                            
+                            <div class="mb-4">
+                                <div class="flex justify-between text-xs font-medium mb-1">
+                                    <span class="text-neutral-600">$150,000 raised</span>
+                                    <span class="text-accent-green">100%</span>
+                                </div>
+                                <div class="w-full bg-neutral-200 rounded-full h-2">
+                                    <div class="bg-accent-green h-2 rounded-full" style="width: 100%"></div>
+                                </div>
+                                <div class="flex justify-between text-xs text-neutral-400 mt-1">
+                                    <span>Goal: $150,000</span>
+                                    <span>Completed</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between pt-4 border-t border-neutral-100">
+                                <div class="flex items-center">
+                                    <img src="startap5.jpg" class="w-8 h-8 rounded-full border-2 border-white shadow-sm" alt="Founder">
+                                    <span class="text-xs font-medium text-neutral-600 ml-2">Malika R.</span>
+                                </div>
+                                <button class="text-primary-600 text-sm font-semibold hover:underline">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                     <div class="neumorph-card overflow-hidden group cursor-pointer" onclick="switchView('detail')">
+                        <div class="relative h-48">
+                            <img src="startap6.jpg" alt="Startup" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold text-blue-500 flex items-center shadow-sm">
+                                <span class="w-2 h-2 rounded-full bg-blue-500 mr-1.5"></span> Funded
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-lg font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">AgroSmart</h3>
+                                <span class="text-xs font-medium text-neutral-400 bg-neutral-100 px-2 py-1 rounded">AgroTech</span>
+                            </div>
+                            <p class="text-sm text-neutral-500 mb-4 line-clamp-2" data-uz="Qishloq xo‘jaligi uchun aqlli monitoring tizimi." data-ru="Умная система мониторинга для сельского хозяйства." data-en="Smart monitoring system for agriculture.">Qishloq xo‘jaligi uchun aqlli monitoring tizimi.</p>
+                            
+                            <div class="mb-4">
+                                <div class="flex justify-between text-xs font-medium mb-1">
+                                    <span class="text-neutral-600">$150,000 raised</span>
+                                    <span class="text-accent-green">100%</span>
+                                </div>
+                                <div class="w-full bg-neutral-200 rounded-full h-2">
+                                    <div class="bg-accent-green h-2 rounded-full" style="width: 100%"></div>
+                                </div>
+                                <div class="flex justify-between text-xs text-neutral-400 mt-1">
+                                    <span>Goal: $150,000</span>
+                                    <span>Completed</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between pt-4 border-t border-neutral-100">
+                                <div class="flex items-center">
+                                    <img src="img1.jpg" class="w-8 h-8 rounded-full border-2 border-white shadow-sm" alt="Founder">
+                                    <span class="text-xs font-medium text-neutral-600 ml-2">Malika R.</span>
+                                </div>
+                                <button class="text-primary-600 text-sm font-semibold hover:underline">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                     <div class="neumorph-card overflow-hidden group cursor-pointer" onclick="switchView('detail')">
+                        <div class="relative h-48">
+                            <img src="startap6.jpg" alt="Startup" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold text-blue-500 flex items-center shadow-sm">
+                                <span class="w-2 h-2 rounded-full bg-blue-500 mr-1.5"></span> Funded
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-lg font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">AgroSmart</h3>
+                                <span class="text-xs font-medium text-neutral-400 bg-neutral-100 px-2 py-1 rounded">AgroTech</span>
+                            </div>
+                            <p class="text-sm text-neutral-500 mb-4 line-clamp-2" data-uz="Qishloq xo‘jaligi uchun aqlli monitoring tizimi." data-ru="Умная система мониторинга для сельского хозяйства." data-en="Smart monitoring system for agriculture.">Qishloq xo‘jaligi uchun aqlli monitoring tizimi.</p>
+                            
+                            <div class="mb-4">
+                                <div class="flex justify-between text-xs font-medium mb-1">
+                                    <span class="text-neutral-600">$150,000 raised</span>
+                                    <span class="text-accent-green">100%</span>
+                                </div>
+                                <div class="w-full bg-neutral-200 rounded-full h-2">
+                                    <div class="bg-accent-green h-2 rounded-full" style="width: 100%"></div>
+                                </div>
+                                <div class="flex justify-between text-xs text-neutral-400 mt-1">
+                                    <span>Goal: $150,000</span>
+                                    <span>Completed</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between pt-4 border-t border-neutral-100">
+                                <div class="flex items-center">
+                                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=2&w=100&h=100&q=80" class="w-8 h-8 rounded-full border-2 border-white shadow-sm" alt="Founder">
+                                    <span class="text-xs font-medium text-neutral-600 ml-2">Malika R.</span>
+                                </div>
+                                <button class="text-primary-600 text-sm font-semibold hover:underline">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+
+                    <!-- Card 3 -->
+                    <div class="neumorph-card overflow-hidden group cursor-pointer" onclick="switchView('detail')">
+                        <div class="relative h-48">
+                            <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Startup" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold text-accent-yellow flex items-center shadow-sm">
+                                <span class="w-2 h-2 rounded-full bg-accent-yellow mr-1.5"></span> In Review
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-lg font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">EduUz Online</h3>
+                                <span class="text-xs font-medium text-neutral-400 bg-neutral-100 px-2 py-1 rounded">EdTech</span>
+                            </div>
+                            <p class="text-sm text-neutral-500 mb-4 line-clamp-2" data-uz="Interactive language learning platform tailored for Uzbek speakers learning English." data-ru="Интерактивная платформа для изучения языков, адаптированная для узбекоговорящих, изучающих английский." data-en="Interactive language learning platform tailored for Uzbek speakers learning English.">Interactive language learning platform tailored for Uzbek speakers learning English.</p>
+                            
+                            <div class="mb-4">
+                                <div class="flex justify-between text-xs font-medium mb-1">
+                                    <span class="text-neutral-600">$12,000 raised</span>
+                                    <span class="text-primary-600">24%</span>
+                                </div>
+                                <div class="w-full bg-neutral-200 rounded-full h-2">
+                                    <div class="bg-primary-600 h-2 rounded-full" style="width: 24%"></div>
+                                </div>
+                                <div class="flex justify-between text-xs text-neutral-400 mt-1">
+                                    <span>Goal: $50,000</span>
+                                    <span>28 days left</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between pt-4 border-t border-neutral-100">
+                                <div class="flex items-center">
+                                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=facearea&facepad=2&w=100&h=100&q=80" class="w-8 h-8 rounded-full border-2 border-white shadow-sm" alt="Founder">
+                                    <span class="text-xs font-medium text-neutral-600 ml-2">Jamshid T.</span>
+                                </div>
+                                <button class="text-primary-600 text-sm font-semibold hover:underline">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="neumorph-card overflow-hidden group cursor-pointer" onclick="switchView('detail')">
+                        <div class="relative h-48">
+                            <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Startup" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold text-accent-red flex items-center shadow-sm">
+                                <span class="w-2 h-2 rounded-full bg-accent-red mr-1.5"></span> Closed
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-lg font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">FinTrack</h3>
+                                <span class="text-xs font-medium text-neutral-400 bg-neutral-100 px-2 py-1 rounded">Fintech</span>
+                            </div>
+                            <p class="text-sm text-neutral-500 mb-4 line-clamp-2" data-uz="Moliyaviy monitoring va tahlil platformasi." data-ru="Платформа для финансового мониторинга и анализа." data-en="Financial monitoring and analysis platform.">Moliyaviy monitoring va tahlil platformasi.</p>
+                            
+                            <div class="mb-4">
+                                <div class="flex justify-between text-xs font-medium mb-1">
+                                    <span class="text-neutral-600">$0 raised</span>
+                                    <span class="text-red-600">Closed</span>
+                                </div>
+                                <div class="w-full bg-neutral-200 rounded-full h-2">
+                                    <div class="bg-red-600 h-2 rounded-full" style="width: 0%"></div>
+                                </div>
+                                <div class="flex justify-between text-xs text-neutral-400 mt-1">
+                                    <span>Goal: $200,000</span>
+                                    <span>Closed</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between pt-4 border-t border-neutral-100">
+                                <div class="flex items-center">
+                                    <img src="https://randomuser.me/api/portraits/men/45.jpg" class="w-8 h-8 rounded-full border-2 border-white shadow-sm" alt="Founder">
+                                    <span class="text-xs font-medium text-neutral-600 ml-2">Dilshod Raximov</span>
+                                </div>
+                                <button class="text-primary-600 text-sm font-semibold hover:underline">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 5 -->
+                    <div class="neumorph-card overflow-hidden group cursor-pointer" onclick="switchView('detail')">
+                        <div class="relative h-48">
+                            <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Startup" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded-md text-xs font-bold text-accent-orange flex items-center shadow-sm">
+                                <span class="w-2 h-2 rounded-full bg-accent-orange mr-1.5"></span> In Progress
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-lg font-bold text-neutral-900 group-hover:text-primary-600 transition-colors">DevUz</h3>
+                                <span class="text-xs font-medium text-neutral-400 bg-neutral-100 px-2 py-1 rounded">IT</span>
+                            </div>
+                            <p class="text-sm text-neutral-500 mb-4 line-clamp-2" data-uz="Dasturchilar uchun resurslar va qo‘llanmalar." data-ru="Ресурсы и руководства для разработчиков." data-en="Resources and guides for developers.">Dasturchilar uchun resurslar va qo‘llanmalar.</p>
+                            
+                            <div class="mb-4">
+                                <div class="flex justify-between text-xs font-medium mb-1">
+                                    <span class="text-neutral-600">$30,000 raised</span>
+                                    <span class="text-primary-600">75%</span>
+                                </div>
+                                <div class="w-full bg-neutral-200 rounded-full h-2">
+                                    <div class="bg-primary-600 h-2 rounded-full" style="width: 75%"></div>
+                                </div>
+                                <div class="flex justify-between text-xs text-neutral-400 mt-1">
+                                    <span>Goal: $40,000</span>
+                                    <span>7 days left</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between pt-4 border-t border-neutral-100">
+                                <div class="flex items-center">
+                                    <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-8 h-8 rounded-full border-2 border-white shadow-sm" alt="Founder">
+                                    <span class="text-xs font-medium text-neutral-600 ml-2">Aziza Karimova</span>
+                                </div>
+                                <button class="text-primary-600 text-sm font-semibold hover:underline">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-12 text-center">
+                    <button class="neumorph-btn px-8 py-3 rounded-xl text-neutral-600 font-medium hover:text-primary-600">Load More Startups</button>
+                </div>
+            </div>
+        </section>
+
+
+
+
+
+       <section id="about" class="view-section py-12">
+
+<h1 class="text-4xl font-bold text-center mb-10">About Me</h1>
+
+<div class="max-w-7xl mx-auto px-5 py-10">
+
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+
+<!-- 1 -->
+<div class="bg-gray-800 rounded-2xl overflow-hidden shadow-xl hover:scale-105 transition duration-300">
+<video class="w-full h-56 object-cover" controls preload="none">
+<source src="vidio1.mp4" type="video/mp4">
+</video>
+</div>
+
+<!-- 2 -->
+<div class="bg-gray-800 rounded-2xl overflow-hidden shadow-xl hover:scale-105 transition duration-300">
+<video class="w-full h-56 object-cover" controls preload="none">
+<source src="vido2.mp4" type="video/mp4">
+</video>
+</div>
+
+<!-- 3 -->
+<div class="bg-gray-800 rounded-2xl overflow-hidden shadow-xl hover:scale-105 transition duration-300">
+<video class="w-full h-56 object-cover" controls preload="none">
+<source src="vido3.mp4" type="video/mp4">
+</video>
+</div>
+
+<!-- 4 -->
+<div class="bg-gray-800 rounded-2xl overflow-hidden shadow-xl hover:scale-105 transition duration-300">
+<video class="w-full h-56 object-cover" controls preload="none">
+<source src="vido5.mp4" type="video/mp4">
+</video>
+</div>
+
+<!-- 5 -->
+<div class="bg-gray-800 rounded-2xl overflow-hidden shadow-xl hover:scale-105 transition duration-300">
+<video class="w-full h-56 object-cover" controls preload="none">
+<source src="vido6.mp4" type="video/mp4">
+</video>
+</div>
+
+<!-- 6 -->
+<div class="bg-gray-800 rounded-2xl overflow-hidden shadow-xl hover:scale-105 transition duration-300">
+<video class="w-full h-56 object-cover" controls preload="none">
+<source src="img7.mp4" type="video/mp4">
+</video>
+</div>
+
+<!-- 7 -->
+<div class="bg-gray-800 rounded-2xl overflow-hidden shadow-xl hover:scale-105 transition duration-300">
+<video class="w-full h-56 object-cover" controls preload="none">
+<source src="img10.mp4" type="video/mp4">
+</video>
+</div>
+
+<!-- 8 -->
+<div class="bg-gray-800 rounded-2xl overflow-hidden shadow-xl hover:scale-105 transition duration-300">
+<video class="w-full h-56 object-cover" controls preload="none">
+<source src="img11.mp4" type="video/mp4">
+</video>
+</div>
+
+<!-- 9 -->
+<div class="bg-gray-800 rounded-2xl overflow-hidden shadow-xl hover:scale-105 transition duration-300">
+<video class="w-full h-56 object-cover" controls preload="none">
+<source src="img9.mp4" type="video/mp4">
+</video>
+</div>
+
+<!-- 10 -->
+<div class="bg-gray-800 rounded-2xl overflow-hidden shadow-xl hover:scale-105 transition duration-300">
+<video class="w-full h-56 object-cover" controls preload="none">
+<source src="img13.mp4" type="video/mp4">
+</video>
+</div>
+
+<!-- 11 -->
+<div class="bg-gray-800 rounded-2xl overflow-hidden shadow-xl hover:scale-105 transition duration-300">
+<video class="w-full h-56 object-cover" controls preload="none">
+<source src="img14.mp4" type="video/mp4">
+</video>
+</div>
+
+<!-- 12 -->
+<div class="bg-gray-800 rounded-2xl overflow-hidden shadow-xl hover:scale-105 transition duration-300">
+<video class="w-full h-56 object-cover" controls preload="none">
+<source src="img7.mp4" type="video/mp4">
+</video>
+</div>
+
+</div>
+</div>
+
+<!-- BUTTON -->
+<div class="flex justify-center mt-10">
+<button class="px-10 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-full shadow-xl hover:scale-110 hover:shadow-2xl transition duration-300">
+Learn More 🚀
+</button>
+</div>
+
+</section>
+
+        <!-- VIEW 3: STARTUP DETAIL -->
+        <section id="detail" class="view-section py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <button onclick="switchView('startups')" class="flex items-center text-neutral-500 hover:text-primary-600 mb-6 transition-colors">
+                    <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i> Back to List
+                </button>
+
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <!-- Main Content -->
+                    <div class="lg:col-span-2 space-y-8">
+                        <!-- Video Player -->
+                        <div class="bg-black rounded-2xl overflow-hidden shadow-2xl aspect-video relative group">
+                            <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" class="w-full h-full object-cover opacity-80">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <button class="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-primary-600 hover:scale-110 transition-all duration-300 border border-white/30">
+                                    <i data-lucide="play" class="w-8 h-8 ml-1 fill-current"></i>
+                                </button>
+                            </div>
+                            <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
+                                <h1 class="text-3xl font-heading font-bold text-white">PayUz Solutions</h1>
+                                <p class="text-neutral-300">Fintech • Tashkent, UZ</p>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="bg-white rounded-2xl p-8 shadow-soft">
+                            <h2 class="text-2xl font-bold text-neutral-900 mb-4">About the Startup</h2>
+                            <p class="text-neutral-600 leading-relaxed mb-6">
+                                PayUz Solutions is aiming to bridge the gap between urban banking infrastructure and rural communities in Uzbekistan. Our SMS-based payment protocol allows users with basic feature phones to conduct secure transactions without internet connectivity.
+                            </p>
+                            <p class="text-neutral-600 leading-relaxed mb-6">
+                                We have already piloted in 3 regions (Fergana, Namangan, Andijan) with over 10,000 active users. We are seeking investment to expand our server infrastructure and obtain a national payment license.
+                            </p>
+                            
+                            <h3 class="text-lg font-bold text-neutral-900 mb-3">The Problem</h3>
+                            <ul class="list-disc list-inside text-neutral-600 space-y-2 mb-6">
+                                <li>Limited internet penetration in remote villages.</li>
+                                <li>High cash dependency for agricultural trade.</li>
+                                <li>Lack of digital credit history for farmers.</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Team -->
+                        <div class="bg-white rounded-2xl p-8 shadow-soft">
+                            <h3 class="text-lg font-bold text-neutral-900 mb-4">Founding Team</h3>
+                            <div class="grid sm:grid-cols-2 gap-6">
+                                <!-- Member 1 -->
+                                <div class="flex items-center bg-neutral-50 p-4 rounded-lg shadow-sm">
+                                    <div class="w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 mr-4">
+                                        <i data-lucide="user" class="w-8 h-8"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-neutral-900">Azizbek K.</p>
+                                        <p class="text-xs text-neutral-500">CEO & Founder</p>
+                                    </div>
+                                </div>
+                                <!-- Member 2 -->
+                                <div class="flex items-center bg-neutral-50 p-4 rounded-lg shadow-sm">
+                                    <div class="w-16 h-16 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 mr-4">
+                                        <i data-lucide="user" class="w-8 h-8"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-neutral-900">Dilshod R.</p>
+                                        <p class="text-xs text-neutral-500">CTO & Co-Founder</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Documents -->
+                        <div class="bg-white rounded-2xl p-8 shadow-soft">
+                            <h3 class="text-lg font-bold text-neutral-900 mb-4">Documents</h3>
+                            <div class="space-y-3">
+                                <a href="#" class="flex items-center p-3 rounded-lg hover:bg-neutral-50 transition-colors group">
+                                    <div class="w-10 h-10 rounded-lg bg-red-50 text-red-500 flex items-center justify-center mr-3 group-hover:bg-red-100 transition-colors">
+                                        <i data-lucide="file-text" class="w-5 h-5"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-neutral-900">Pitch Deck.pdf</p>
+                                        <p class="text-xs text-neutral-500">2.4 MB</p>
+                                    </div>
+                                    <i data-lucide="download" class="w-4 h-4 ml-auto text-neutral-400 group-hover:text-neutral-600"></i>
+                                </a>
+                                <a href="#" class="flex items-center p-3 rounded-lg hover:bg-neutral-50 transition-colors group">
+                                    <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-500 flex items-center justify-center mr-3 group-hover:bg-blue-100 transition-colors">
+                                        <i data-lucide="bar-chart-2" class="w-5 h-5"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-neutral-900">Financials.xlsx</p>
+                                        <p class="text-xs text-neutral-500">1.1 MB</p>
+                                    </div>
+                                    <i data-lucide="download" class="w-4 h-4 ml-auto text-neutral-400 group-hover:text-neutral-600"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 4: ADD STARTUP FORM -->
+        <section id="add-startup" class="view-section py-12">
+            <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-heading font-bold text-neutral-900">Add Your Startup</h2>
+                    <p class="text-neutral-500 mt-2">Complete the steps below to showcase your project to investors.</p>
+                </div>
+
+                <!-- Progress Steps -->
+                <div class="flex justify-between items-center mb-12 relative">
+                    <div class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-neutral-200 -z-10"></div>
+                    <div class="absolute left-0 top-1/2 -translate-y-1/2 w-1/3 h-1 bg-primary-600 -z-10 transition-all duration-500" id="progress-bar"></div>
+                    
+                    <div class="flex flex-col items-center">
+                        <div class="w-10 h-10 rounded-full bg-primary-600 text-white flex items-center justify-center font-bold shadow-lg shadow-primary-600/30 ring-4 ring-white">1</div>
+                        <span class="text-xs font-medium text-primary-600 mt-2">Basics</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="w-10 h-10 rounded-full bg-white border-2 border-primary-600 text-primary-600 flex items-center justify-center font-bold ring-4 ring-white">2</div>
+                        <span class="text-xs font-medium text-neutral-500 mt-2">Pitch</span>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="w-10 h-10 rounded-full bg-white border-2 border-neutral-300 text-neutral-400 flex items-center justify-center font-bold ring-4 ring-white">3</div>
+                        <span class="text-xs font-medium text-neutral-500 mt-2">Finance</span>
+                    </div>
+                </div>
+
+                <!-- Form Card -->
+                <div class="neumorph-card p-8">
+                    <form onsubmit="event.preventDefault();">
+                        <!-- Step 1 Content -->
+                        <div class="space-y-6">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-neutral-700 mb-2">Startup Name</label>
+                                    <input type="text" class="w-full px-4 py-3 rounded-lg bg-neutral-50 border border-neutral-200 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all outline-none" placeholder="e.g. PayUz">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-neutral-700 mb-2">Industry</label>
+                                    <select class="w-full px-4 py-3 rounded-lg bg-neutral-50 border border-neutral-200 focus:ring-2 focus:ring-primary-500 outline-none">
+                                        <option>Fintech</option>
+                                        <option>AgroTech</option>
+                                        <option>EdTech</option>
+                                        <option>E-commerce</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-neutral-700 mb-2">Short Description (English)</label>
+                                <textarea rows="3" class="w-full px-4 py-3 rounded-lg bg-neutral-50 border border-neutral-200 focus:ring-2 focus:ring-primary-500 outline-none" placeholder="Briefly describe your startup..."></textarea>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-neutral-700 mb-2">Video Pitch Upload</label>
+                                <div class="border-2 border-dashed border-neutral-300 rounded-xl p-8 text-center hover:bg-neutral-50 transition-colors cursor-pointer group">
+                                    <div class="w-12 h-12 bg-primary-50 text-primary-600 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                                        <i data-lucide="upload-cloud" class="w-6 h-6"></i>
+                                    </div>
+                                    <p class="text-sm font-medium text-neutral-900">Click to upload or drag and drop</p>
+                                    <p class="text-xs text-neutral-500 mt-1">MP4, MOV up to 50MB</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end mt-8 pt-6 border-t border-neutral-100">
+                            <button class="px-8 py-3 bg-primary-600 text-white rounded-xl font-bold shadow-lg shadow-primary-600/30 hover:bg-primary-700 transition-all">Next Step</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 5: INVESTOR PANEL -->
+        <section id="investor" class="view-section py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-3xl font-heading font-bold text-neutral-900">Investor Dashboard</h2>
+                    <div class="flex gap-3">
+                        <span class="relative flex h-3 w-3">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-3 w-3 bg-primary-500"></span>
+                        </span>
+                        <span class="text-sm font-medium text-neutral-600">Live Updates</span>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid md:grid-cols-4 gap-6 mb-8">
+                    <div class="neumorph-card p-6">
+                        <p class="text-sm text-neutral-500 mb-1">Total Invested</p>
+                        <h3 class="text-2xl font-bold text-neutral-900">$124,500</h3>
+                        <span class="text-xs text-green-600 font-medium flex items-center mt-1"><i data-lucide="arrow-up" class="w-3 h-3 mr-1"></i> +12% this month</span>
+                    </div>
+                    <div class="neumorph-card p-6">
+                        <p class="text-sm text-neutral-500 mb-1">Active Deals</p>
+                        <h3 class="text-2xl font-bold text-neutral-900">5</h3>
+                        <span class="text-xs text-neutral-400 font-medium mt-1">2 closing soon</span>
+                    </div>
+                    <div class="neumorph-card p-6">
+                        <p class="text-sm text-neutral-500 mb-1">Portfolio Value</p>
+                        <h3 class="text-2xl font-bold text-neutral-900">$180,000</h3>
+                        <span class="text-xs text-green-600 font-medium flex items-center mt-1"><i data-lucide="arrow-up" class="w-3 h-3 mr-1"></i> +45% ROI</span>
+                    </div>
+                    <div class="neumorph-card p-6">
+                        <p class="text-sm text-neutral-500 mb-1">New Matches</p>
+                        <h3 class="text-2xl font-bold text-neutral-900">12</h3>
+                        <span class="text-xs text-primary-600 font-medium mt-1 cursor-pointer hover:underline">View all</span>
+                    </div>
+                </div>
+
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <!-- Portfolio Table -->
+                    <div class="lg:col-span-2 neumorph-card p-6">
+                        <h3 class="font-bold text-neutral-900 mb-6">Your Portfolio</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="text-left text-xs text-neutral-500 border-b border-neutral-200">
+                                        <th class="pb-3 font-medium">Startup</th>
+                                        <th class="pb-3 font-medium">Invested Date</th>
+                                        <th class="pb-3 font-medium">Amount</th>
+                                        <th class="pb-3 font-medium">Status</th>
+                                        <th class="pb-3 font-medium">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-sm">
+                                    <tr class="border-b border-neutral-100 group hover:bg-neutral-50 transition-colors">
+                                        <td class="py-4 font-medium text-neutral-900 flex items-center">
+                                            <div class="w-8 h-8 rounded bg-primary-100 mr-3 flex items-center justify-center text-primary-600 font-bold">P</div>
+                                            PayUz
+                                        </td>
+                                        <td class="py-4 text-neutral-500">Oct 24, 2023</td>
+                                        <td class="py-4 text-neutral-900 font-medium">$25,000</td>
+                                        <td class="py-4"><span class="px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-700">Growing</span></td>
+                                        <td class="py-4"><button class="text-neutral-400 hover:text-primary-600"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button></td>
+                                    </tr>
+                                    <tr class="border-b border-neutral-100 group hover:bg-neutral-50 transition-colors">
+                                        <td class="py-4 font-medium text-neutral-900 flex items-center">
+                                            <div class="w-8 h-8 rounded bg-yellow-100 mr-3 flex items-center justify-center text-yellow-600 font-bold">A</div>
+                                            AgroSmart
+                                        </td>
+                                        <td class="py-4 text-neutral-500">Sep 12, 2023</td>
+                                        <td class="py-4 text-neutral-900 font-medium">$50,000</td>
+                                        <td class="py-4"><span class="px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-700">Stable</span></td>
+                                        <td class="py-4"><button class="text-neutral-400 hover:text-primary-600"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button></td>
+                                    </tr>
+                                    <tr class="group hover:bg-neutral-50 transition-colors">
+                                        <td class="py-4 font-medium text-neutral-900 flex items-center">
+                                            <div class="w-8 h-8 rounded bg-purple-100 mr-3 flex items-center justify-center text-purple-600 font-bold">E</div>
+                                            EduUz
+                                        </td>
+                                        <td class="py-4 text-neutral-500">Nov 01, 2023</td>
+                                        <td class="py-4 text-neutral-900 font-medium">$10,000</td>
+                                        <td class="py-4"><span class="px-2 py-1 rounded text-xs font-medium bg-yellow-100 text-yellow-700">Pending</span></td>
+                                        <td class="py-4"><button class="text-neutral-400 hover:text-primary-600"><i data-lucide="more-horizontal" class="w-4 h-4"></i></button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Chart -->
+                    <div class="neumorph-card p-6">
+                        <h3 class="font-bold text-neutral-900 mb-6">Portfolio Allocation</h3>
+                        <div class="relative h-64 w-full">
+                            <canvas id="portfolioChart"></canvas>
+                        </div>
+                        <div class="mt-4 space-y-2">
+                            <div class="flex justify-between text-sm">
+                                <span class="flex items-center text-neutral-600"><span class="w-3 h-3 rounded-full bg-primary-500 mr-2"></span>Fintech</span>
+                                <span class="font-medium">45%</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="flex items-center text-neutral-600"><span class="w-3 h-3 rounded-full bg-accent-green mr-2"></span>AgroTech</span>
+                                <span class="font-medium">35%</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="flex items-center text-neutral-600"><span class="w-3 h-3 rounded-full bg-accent-yellow mr-2"></span>EdTech</span>
+                                <span class="font-medium">20%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="bg-gradient-to-br from-gray-900 to-black text-gray-300 pt-16 pb-8 mt-20">
+
+  <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+
+    <!-- Logo & About -->
+    <div>
+      <h2 class="text-2xl font-extrabold text-white mb-4">
+        🚀 Programmer Sardor
+      </h2>
+      <p class="text-sm leading-6">
+        Zamonaviy web loyihalar, startap platformalar va innovatsion IT yechimlar yaratamiz.
+        Sifat va tezlik — bizning ustunligimiz.
+      </p>
+    </div>
+
+    <!-- Quick Links -->
+    <div>
+      <h3 class="text-lg font-bold text-white mb-4">Quick Links</h3>
+      <ul class="space-y-3 text-sm">
+        <li><a href="#" class="hover:text-blue-400 transition">Home</a></li>
+        <li><a href="#" class="hover:text-blue-400 transition">About</a></li>
+        <li><a href="#" class="hover:text-blue-400 transition">Projects</a></li>
+        <li><a href="#" class="hover:text-blue-400 transition">Services</a></li>
+        <li><a href="#" class="hover:text-blue-400 transition">Contact</a></li>
+      </ul>
+    </div>
+
+    <!-- Contact Info -->
+    <div>
+      <h3 class="text-lg font-bold text-white mb-4">Contact</h3>
+      <ul class="space-y-3 text-sm">
+        <li>📍 Tashkent, Uzbekistan</li>
+        <li>📞 +998 90 123 45 67</li>
+        <li>📧 info@sardor.dev</li>
+        <li>🕒 Mon - Sat: 09:00 - 18:00</li>
+      </ul>
+    </div>
+
+    <!-- Newsletter -->
+    <div>
+      <h3 class="text-lg font-bold text-white mb-4">Subscribe</h3>
+      <p class="text-sm mb-4">
+        Yangiliklardan xabardor bo‘lish uchun email qoldiring.
+      </p>
+      <div class="flex">
+        <input type="email" placeholder="Your email"
+          class="w-full px-4 py-2 rounded-l-lg bg-gray-800 text-white focus:outline-none">
+        <button class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-r-lg transition">
+          Send
+        </button>
+      </div>
+
+      <!-- Social Icons -->
+      <div class="flex space-x-4 mt-6 text-xl">
+        <a href="#" class="hover:text-blue-500 transition">🌐</a>
+        <a href="#" class="hover:text-pink-500 transition">📸</a>
+        <a href="#" class="hover:text-sky-400 transition">🐦</a>
+        <a href="#" class="hover:text-green-400 transition">💬</a>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Bottom -->
+  <div class="border-t border-gray-700 mt-12 pt-6 text-center text-sm text-gray-500">
+    © 2026 Programmer Sardor. All rights reserved.
+  </div>
+
+</footer>
+
+    <script>
+        // Lucide icons must be re-initialized after DOM changes
+        function renderIcons() {
+            if (window.lucide && typeof lucide.createIcons === "function") {
+                lucide.createIcons();
+            }
+        }
+
+        // View Switching Logic
+        function switchView(viewId) {
+            document.querySelectorAll('.view-section').forEach(el => {
+                el.classList.remove('active');
+            });
+            const target = document.getElementById(viewId);
+            if(target) {
+                target.classList.add('active');
+                window.scrollTo(0, 0);
+            }
+            if(viewId === 'investor') {
+                setTimeout(initChart, 100);
+            }
+            const lang = localStorage.getItem('lang') || 'en';
+            setLang(lang);
+            if (window.innerWidth < 768) {
+                if (typeof window.closeMobileMenu === "function") window.closeMobileMenu();
+            }
+            renderIcons();
+        }
+
+        let chartInstance = null;
+        function initChart() {
+            const ctx = document.getElementById('portfolioChart');
+            if (!ctx) return;
+            if (chartInstance) {
+                chartInstance.destroy();
+                chartInstance = null;
+            }
+            chartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Fintech', 'AgroTech', 'EdTech'],
+                    datasets: [{
+                        data: [45, 35, 20],
+                        backgroundColor: [
+                            '#4F46E5',
+                            '#10B981',
+                            '#F59E0B'
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    cutout: '70%'
+                }
+            });
+        }
+
+        function setLang(lang) {
+            document.querySelectorAll('[data-uz],[data-ru],[data-en]').forEach(el => {
+                if (el.dataset[lang]) el.textContent = el.dataset[lang];
+            });
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('bg-white', btn.dataset.lang === lang);
+                btn.classList.toggle('text-primary-600', btn.dataset.lang === lang);
+                btn.classList.toggle('font-bold', btn.dataset.lang === lang);
+                btn.classList.toggle('shadow-sm', btn.dataset.lang === lang);
+                btn.classList.toggle('text-neutral-500', btn.dataset.lang !== lang);
+            });
+            localStorage.setItem('lang', lang);
+        }
+
+        // --- MOBILE MENU LOGIC ---
+        document.addEventListener('DOMContentLoaded', function() {
+            renderIcons();
+
+            // Language buttons
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.onclick = () => setLang(btn.dataset.lang);
+            });
+
+            // Set default language on load
+            const savedLang = localStorage.getItem('lang') || 'en';
+            setLang(savedLang);
+
+            // Mobile menu
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const closeMobileMenuBtn = document.getElementById('close-mobile-menu');
+
+            function openMobileMenu() {
+                mobileMenu.classList.remove('translate-x-full');
+                mobileMenu.classList.add('translate-x-0');
+                document.body.style.overflow = 'hidden';
+            }
+            function closeMobileMenu() {
+                mobileMenu.classList.remove('translate-x-0');
+                mobileMenu.classList.add('translate-x-full');
+                document.body.style.overflow = '';
+            }
+
+            // Export to global for switchView
+            window.closeMobileMenu = closeMobileMenu;
+
+            if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                openMobileMenu();
+            });
+            if (closeMobileMenuBtn) closeMobileMenuBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                closeMobileMenu();
+            });
+
+            // Prevent menu from closing when clicking inside
+            if (mobileMenu) {
+                mobileMenu.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            }
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (
+                    mobileMenu &&
+                    !mobileMenu.classList.contains('translate-x-full') &&
+                    !mobileMenu.contains(e.target) &&
+                    e.target !== mobileMenuBtn
+                ) {
+                    closeMobileMenu();
+                }
+            });
+
+            window.addEventListener('resize', function() {
+                if (window.innerWidth >= 768) {
+                    closeMobileMenu();
+                }
+            });
+        });
+    </script>
+<!-- // ...existing code... -->
+</body>
+</html>
